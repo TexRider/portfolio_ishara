@@ -222,7 +222,7 @@ const Gallery = () => {
   };
 
   return (
-    <section id="gallery" className="min-h-screen py-20 px-4 bg-[#1a1a1a]">
+    <section id="gallery" className="min-h-screen py-20 px-4 bg-linear-to-r from-[#230A02]/50 to-[#1C0802]/50">
       <div className="px-4 mx-auto">
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center mb-4 text-[#FBF9D1]"
