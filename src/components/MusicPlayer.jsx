@@ -35,7 +35,7 @@ const MusicPlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showPlaylist, setShowPlaylist] = useState(false);
-  const [isMini, setIsMini] = useState(false);
+  const [isMini, setIsMini] = useState(true);
   const [error, setError] = useState(null);
   const [audioData, setAudioData] = useState(new Array(15).fill(0));
   const [showVolumeControl, setShowVolumeControl] = useState(false);
