@@ -1,4 +1,3 @@
-// Home.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import HeroSection from "../components/HeroSection.jsx";
@@ -27,7 +26,6 @@ const Home = () => {
       {/* Content */}
       <motion.div
         id="hero"
-        className="relative z-10"
         variants={fadeVariants}
         initial="hidden"
         whileInView="visible"
@@ -39,7 +37,6 @@ const Home = () => {
 
       <motion.div
         id="portfolio"
-        className="relative z-10"
         variants={fadeVariants}
         initial="hidden"
         whileInView="visible"
@@ -52,7 +49,6 @@ const Home = () => {
       {/* Gallery Section */}
       <motion.div
         id="gallery"
-        className="relative z-10"
         variants={fadeVariants}
         initial="hidden"
         whileInView="visible"
@@ -64,7 +60,6 @@ const Home = () => {
 
       <motion.div
         id="about"
-        className="relative z-10"
         variants={fadeVariants}
         initial="hidden"
         whileInView="visible"

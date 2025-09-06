@@ -29,6 +29,17 @@ const PortfolioPage = () => {
       image: "/Ishara_Gallery/Portrait_KatanaSet_Image_1.jpg",
       technologies: ["Wood Designs", "Cosplay Props"],
       liveUrl: "https://www.vtrolly.com",
+      githubUrl: null,
+      category: "Crafts"
+    },
+    {
+      id: 2,
+      title: "Cosplay Gear Props",
+      description: "Custom designs tailor-made for the requested characters. Specialized in designing weapon props, also available in props and accessories. Wood based props are specialized",
+      image: "/Ishara_Profile/Cosplay_1.jpg",
+      technologies: ["Wood Designs", "Cosplay Props"],
+      liveUrl: "https://www.vtrolly.com",
+      githubUrl: null,
       category: "Cosplay Designs"
     },
     // Add more projects...

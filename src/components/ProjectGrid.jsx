@@ -1,15 +1,34 @@
-import { motion } from 'framer-motion';
-import ProjectCard from './ProjectCard.jsx';
+import { motion } from "framer-motion";
+import ProjectCard from "./ProjectCard.jsx";
+import ProjectModal from "./ProjectModal.jsx";
+import { useState } from "react";
 
-const ProjectsGrid = ({ projects, title = "My Projects", subtitle = "Here are some of my recent works" }) => {
+const ProjectsGrid = ({
+  projects,
+  title = "My Projects",
+  subtitle = "Here are some of my recent works",
+}) => {
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const handleCardClick = (project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
   };
 
   return (
@@ -44,9 +63,17 @@ const ProjectsGrid = ({ projects, title = "My Projects", subtitle = "Here are so
               key={project.id}
               project={project}
               index={index}
+              onCardClick={handleCardClick}
             />
           ))}
         </motion.div>
+
+        {/* Modal */}
+        <ProjectModal
+          project={selectedProject}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
       </div>
     </section>
   );

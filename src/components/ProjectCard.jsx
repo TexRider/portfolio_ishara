@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { ExternalLink, Github, Eye } from "lucide-react";
 
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = ({ project, index, onCardClick }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const cardVariants = {
@@ -31,15 +31,20 @@ const ProjectCard = ({ project, index }) => {
     },
   };
 
+  const handleClick = () => {
+    onCardClick(project);
+  };
+
   return (
     <motion.div
       variants={cardVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+      className="group bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
     >
       {/* Image Container */}
       <div className="relative overflow-hidden rounded-t-xl">

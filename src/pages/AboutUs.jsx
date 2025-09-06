@@ -1,49 +1,22 @@
-// AboutUs.jsx
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Mail, Linkedin, Github } from "lucide-react";
 
 // Team member data
 const teamMembers = [
   {
     id: 1,
-    name: 'Sarah Johnson',
-    role: 'CEO & Founder',
-    image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    description: 'With over 10 years of experience in the industry, Sarah leads our team with vision and passion. She believes in creating products that make a difference in people\'s lives.',
-    skills: ['Leadership', 'Strategy', 'Innovation']
+    name: "Ishara Perera",
+    role: "Owner",
+    image: "/Ishara_Profile/Cosplay_2.jpg",
+    description:
+      "I am a passionate wooden props artisan dedicated to crafting unique, story-driven pieces that ignite creativity and elevate any setting. From theatrical productions and film sets to photo shoots and bespoke displays, my work blends traditional craftsmanship with artistic vision. Each prop is meticulously handcrafted, ensuring it embodies character, authenticity, and timeless beauty. For me, wood is not just a material—it’s a canvas for imagination.",
+    skills: ["Crafter", "Cosplayer"],
+    // email: "sarah@company.com",
+    // linkedin: "https://linkedin.com/in/sarahjohnson",
+    // github: "https://github.com/sarahjohnson",
   },
-  {
-    id: 2,
-    name: 'Michael Chen',
-    role: 'Lead Developer',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    description: 'Michael is a full-stack developer with expertise in modern web technologies. He enjoys solving complex problems and building scalable applications.',
-    skills: ['JavaScript', 'React', 'Node.js']
-  },
-  {
-    id: 3,
-    name: 'Emily Rodriguez',
-    role: 'UX Designer',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    description: 'Emily creates intuitive and beautiful user experiences. She believes good design should be both functional and delightful for users.',
-    skills: ['UI/UX Design', 'User Research', 'Prototyping']
-  },
-  {
-    id: 4,
-    name: 'David Kim',
-    role: 'Marketing Director',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    description: 'David develops comprehensive marketing strategies that drive growth and engagement. He is passionate about building brand identity.',
-    skills: ['Digital Marketing', 'SEO', 'Brand Strategy']
-  },
-  {
-    id: 5,
-    name: 'Alex Turner',
-    role: 'Product Manager',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    description: 'Alex oversees product development from conception to launch, ensuring our solutions meet market needs and user expectations.',
-    skills: ['Product Strategy', 'Agile', 'Market Research']
-  }
+  // Leave this to add more members to the portfolio
 ];
 
 // Animation variants
@@ -52,13 +25,13 @@ const fadeVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: "easeOut" }
+    transition: { duration: 0.8, ease: "easeOut" },
   },
   exit: {
     opacity: 0,
     y: -20,
-    transition: { duration: 0.5, ease: "easeIn" }
-  }
+    transition: { duration: 0.5, ease: "easeIn" },
+  },
 };
 
 const containerVariants = {
@@ -66,9 +39,9 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
-    }
-  }
+      staggerChildren: 0.2,
+    },
+  },
 };
 
 const itemVariants = {
@@ -78,9 +51,9 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const cardVariants = {
@@ -90,18 +63,19 @@ const cardVariants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: "easeOut"
-    }
+      ease: "easeOut",
+    },
   },
   hover: {
     scale: 1.02,
     y: -5,
-    boxShadow: "0 10px 25px -5px rgba(154, 63, 63, 0.3), 0 8px 10px -6px rgba(154, 63, 63, 0.3)",
+    boxShadow:
+      "0 10px 25px -5px rgba(154, 63, 63, 0.3), 0 8px 10px -6px rgba(154, 63, 63, 0.3)",
     transition: {
       duration: 0.3,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const imageVariants = {
@@ -109,40 +83,238 @@ const imageVariants = {
     scale: 1.1,
     transition: {
       duration: 0.4,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const buttonVariants = {
   hover: {
     scale: 1.05,
-    backgroundColor: "#7a2f2f",
+    backgroundColor: "#7a2f2f", // Use hex instead of Tailwind class
     transition: {
       duration: 0.2,
-      ease: "easeOut"
-    }
+      ease: "easeOut",
+    },
   },
   tap: {
-    scale: 0.95
-  }
+    scale: 0.95,
+  },
 };
 
 const skillVariants = {
   hover: {
     scale: 1.05,
-    backgroundColor: "#9A3F3F",
-    color: "#FBF9D1",
+    backgroundColor: "#9A3F3F", // Use hex instead of Tailwind class
+    color: "#FBF9D1", // Use hex instead of Tailwind class
     transition: {
       duration: 0.2,
-      ease: "easeOut"
+      ease: "easeOut",
+    },
+  },
+};
+
+// Team Member Modal Component
+const TeamMemberModal = ({ member, isOpen, onClose }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
     }
-  }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !member) return null;
+
+  const modalVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.8,
+      y: 20,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      y: 20,
+      transition: {
+        duration: 0.2,
+        ease: "easeIn",
+      },
+    },
+  };
+
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && member && (
+        <>
+          {/* Overlay */}
+          <motion.div
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="fixed inset-0 bg-black bg-opacity-75 z-[1000] flex items-center justify-center p-2 sm:p-4"
+            onClick={onClose}
+          >
+            {/* Modal Content */}
+            <motion.div
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col lg:flex-row"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={onClose}
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 p-1 sm:p-2 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors z-10"
+              >
+                <X
+                  size={18}
+                  className="sm:size-6 text-gray-600 dark:text-gray-300"
+                />
+              </button>
+
+              {/* Image Section - Full width square image */}
+              <div className="lg:w-2/5 flex-shrink-0">
+                <div className="w-full h-64 sm:h-80 lg:h-full">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover lg:rounded-l-xl"
+                  />
+                </div>
+              </div>
+
+              {/* Content Section - Right Side */}
+              <div className="lg:w-3/5 flex flex-col overflow-y-auto p-4 sm:p-6 md:p-8">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  {member.name}
+                </h2>
+                <p className="text-lg text-[#C1856D] dark:text-[#E6CFA9] font-medium mb-4">
+                  {member.role}
+                </p>
+
+                <p className="text-gray-600 dark:text-gray-300 mb-6 text-base sm:text-lg leading-relaxed">
+                  {member.description}
+                </p>
+
+                {/* Skills */}
+                <div className="mb-6">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                    Skills & Expertise
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {member.skills.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-2 bg-[#E6CFA9] dark:bg-[#C1856D] text-[#9A3F3F] dark:text-[#FBF9D1] rounded-full text-sm font-medium"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Contact Links */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  {member.email && (
+                    <motion.a
+                      href={`mailto:${member.email}`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-[#9A3F3F] text-[#FBF9D1] rounded-lg hover:bg-[#C1856D] transition-colors font-semibold text-sm sm:text-base"
+                    >
+                      <Mail size={18} />
+                      <span>Email</span>
+                    </motion.a>
+                  )}
+                  {member.linkedin && (
+                    <motion.a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-[#0077B5] text-white rounded-lg hover:bg-[#005582] transition-colors font-semibold text-sm sm:text-base"
+                    >
+                      <Linkedin size={18} />
+                      <span>LinkedIn</span>
+                    </motion.a>
+                  )}
+                  {member.github && (
+                    <motion.a
+                      href={member.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors font-semibold text-sm sm:text-base"
+                    >
+                      <Github size={18} />
+                      <span>GitHub</span>
+                    </motion.a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
 };
 
 const AboutUs = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [hoveredMember, setHoveredMember] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleMemberClick = (member) => {
+    setSelectedMember(member);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedMember(null);
+  };
 
   return (
     <motion.section
@@ -156,7 +328,7 @@ const AboutUs = () => {
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-72 h-72 bg-[#E6CFA9] rounded-full -translate-x-1/2 -translate-y-1/2 opacity-30"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#C1856D] rounded-full translate-x-1/3 translate-y-1/3 opacity-20"></div>
-      
+
       <div className="container mx-auto px-4 relative z-10">
         {/* Header Section */}
         <motion.div
@@ -170,13 +342,15 @@ const AboutUs = () => {
             variants={itemVariants}
             className="text-4xl md:text-5xl font-bold text-[#9A3F3F] mb-4"
           >
-            About Our Team
+            About Me
           </motion.h2>
           <motion.p
             variants={itemVariants}
             className="text-xl text-[#9A3F3F] max-w-3xl mx-auto mb-8"
           >
-            We're a passionate team dedicated to creating exceptional digital experiences that make a difference.
+            I am a passionate crafter, dedicated to create exceptional wooden
+            props and equipments. All are hand-made with care for quality based
+            design.
           </motion.p>
           <motion.div
             variants={itemVariants}
@@ -193,21 +367,24 @@ const AboutUs = () => {
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
         >
           {[
-            { number: '50+', label: 'Projects Completed' },
-            { number: '15+', label: 'Years Experience' },
-            { number: '100%', label: 'Client Satisfaction' }
+            { number: "50+", label: "Props crafted" },
+            { number: "4+", label: "Years Experience" },
+            { number: "100%", label: "Client Satisfaction" },
           ].map((stat, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.05,
-                boxShadow: "0 10px 15px -3px rgba(154, 63, 63, 0.2), 0 4px 6px -4px rgba(154, 63, 63, 0.2)",
-                transition: { duration: 0.3 }
+                boxShadow:
+                  "0 10px 15px -3px rgba(154, 63, 63, 0.2), 0 4px 6px -4px rgba(154, 63, 63, 0.2)",
+                transition: { duration: 0.3 },
               }}
               className="text-center p-6 bg-[#E6CFA9] rounded-lg shadow-lg border-2 border-[#9A3F3F] border-opacity-10 cursor-pointer"
             >
-              <h3 className="text-4xl font-bold text-[#9A3F3F] mb-2">{stat.number}</h3>
+              <h3 className="text-4xl font-bold text-[#9A3F3F] mb-2">
+                {stat.number}
+              </h3>
               <p className="text-[#9A3F3F]">{stat.label}</p>
             </motion.div>
           ))}
@@ -231,12 +408,14 @@ const AboutUs = () => {
               whileHover="hover"
               onHoverStart={() => setHoveredMember(member.id)}
               onHoverEnd={() => setHoveredMember(null)}
-              className={`flex flex-col ${member.id % 2 === 0 ? 'md:flex-row-reverse' : 'md:flex-row'} bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-[#E6CFA9] transition-all duration-300 cursor-pointer`}
-              onClick={() => setSelectedMember(member)}
+              className={`flex flex-col ${
+                member.id % 2 === 0 ? "md:flex-row-reverse" : "md:flex-row"
+              } bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-[#E6CFA9] transition-all duration-300 cursor-pointer`}
+              onClick={() => handleMemberClick(member)}
             >
               {/* Image Section with enhanced hover */}
               <div className="md:w-2/5 h-80 flex items-center justify-center bg-gray-100 overflow-hidden relative">
-                <motion.div 
+                <motion.div
                   className="w-64 h-64 rounded-full overflow-hidden border-4 border-[#E6CFA9] shadow-md"
                   variants={imageVariants}
                   whileHover="hover"
@@ -250,7 +429,7 @@ const AboutUs = () => {
                 {/* Overlay effect on hover */}
                 <AnimatePresence>
                   {hoveredMember === member.id && (
-                    <motion.div 
+                    <motion.div
                       className="absolute inset-0 bg-[#9A3F3F] bg-opacity-20 flex items-center justify-center"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -270,33 +449,33 @@ const AboutUs = () => {
                   )}
                 </AnimatePresence>
               </div>
-              
+
               {/* Content Section */}
               <div className="md:w-3/5 p-8 flex flex-col justify-center">
-                <motion.h3 
+                <motion.h3
                   className="text-2xl font-bold text-[#9A3F3F] mb-2"
                   whileHover={{ color: "#7a2f2f" }}
                   transition={{ duration: 0.2 }}
                 >
                   {member.name}
                 </motion.h3>
-                <motion.p 
+                <motion.p
                   className="text-lg text-[#C1856D] font-medium mb-4"
                   whileHover={{ color: "#9A3F3F" }}
                   transition={{ duration: 0.2 }}
                 >
                   {member.role}
                 </motion.p>
-                <motion.p 
+                <motion.p
                   className="text-gray-700 mb-6 leading-relaxed"
                   whileHover={{ color: "#5a5a5a" }}
                   transition={{ duration: 0.2 }}
                 >
                   {member.description}
                 </motion.p>
-                
+
                 <div className="mb-6">
-                  <motion.h4 
+                  <motion.h4
                     className="text-lg font-semibold text-[#9A3F3F] mb-3"
                     whileHover={{ color: "#7a2f2f" }}
                     transition={{ duration: 0.2 }}
@@ -305,7 +484,7 @@ const AboutUs = () => {
                   </motion.h4>
                   <div className="flex flex-wrap gap-2">
                     {member.skills.map((skill, index) => (
-                      <motion.span 
+                      <motion.span
                         key={index}
                         variants={skillVariants}
                         whileHover="hover"
@@ -316,18 +495,18 @@ const AboutUs = () => {
                     ))}
                   </div>
                 </div>
-                
-                <motion.button 
+
+                <motion.button
                   variants={buttonVariants}
                   whileHover="hover"
                   whileTap="tap"
                   className="self-start bg-[#9A3F3F] text-white py-2 px-6 rounded-lg font-medium transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedMember(member);
+                    handleMemberClick(member);
                   }}
                 >
-                  Contact {member.name.split(' ')[0]}
+                  Contact {member.name.split(" ")[0]}
                 </motion.button>
               </div>
             </motion.div>
@@ -340,9 +519,9 @@ const AboutUs = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={containerVariants}
-          whileHover={{ 
+          whileHover={{
             scale: 1.01,
-            transition: { duration: 0.3 }
+            transition: { duration: 0.3 },
           }}
           className="bg-[#9A3F3F] rounded-2xl p-8 md:p-12 text-center cursor-pointer"
         >
@@ -356,91 +535,21 @@ const AboutUs = () => {
             variants={itemVariants}
             className="text-lg md:text-xl text-[#E6CFA9] leading-relaxed max-w-4xl mx-auto"
           >
-            We believe in the power of technology to transform businesses and improve lives. 
-            Our mission is to deliver innovative solutions that exceed expectations and 
-            create lasting value for our clients and their customers.
+            "Every grain of wood holds a story, and I bring that story to life.
+            My mission is to transform raw timber into captivating props that
+            whisper tales of imagination and wonder. Each creation is more than
+            an object—it’s a character, a mood, a spark of artistry crafted by
+            hand, designed to enchant stages, sets, and souls alike."
           </motion.p>
         </motion.div>
       </div>
 
       {/* Team Member Modal */}
-      <AnimatePresence>
-        {selectedMember && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-            onClick={() => setSelectedMember(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              whileHover={{ scale: 1.01 }}
-              className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative">
-                <motion.button 
-                  whileHover={{ scale: 1.1, backgroundColor: "#E6CFA9" }}
-                  whileTap={{ scale: 0.9 }}
-                  className="absolute top-4 right-4 text-[#9A3F3F] bg-[#FBF9D1] rounded-full p-2 z-10"
-                  onClick={() => setSelectedMember(null)}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </motion.button>
-                
-                {/* Modal Image */}
-                <div className="h-64 w-full flex items-center justify-center bg-gray-100">
-                  <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-[#E6CFA9] shadow-md">
-                    <img
-                      src={selectedMember.image}
-                      alt={selectedMember.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-[#9A3F3F] mb-1">
-                    {selectedMember.name}
-                  </h3>
-                  <p className="text-lg text-[#C1856D] font-medium mb-4">{selectedMember.role}</p>
-                  <p className="text-gray-700 mb-6">{selectedMember.description}</p>
-                  
-                  <div className="mb-6">
-                    <h4 className="text-lg font-semibold text-[#9A3F3F] mb-3">Skills & Expertise</h4>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {selectedMember.skills.map((skill, index) => (
-                        <motion.span 
-                          key={index}
-                          whileHover={{ scale: 1.05, backgroundColor: "#9A3F3F", color: "#FBF9D1" }}
-                          className="px-3 py-1 bg-[#E6CFA9] text-[#9A3F3F] rounded-full text-sm cursor-default"
-                        >
-                          {skill}
-                        </motion.span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="flex space-x-4 pt-4 border-t border-gray-200">
-                    <motion.button 
-                      whileHover={{ scale: 1.05, backgroundColor: "#7a2f2f" }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex-1 bg-[#9A3F3F] text-white py-2 rounded-lg font-medium"
-                    >
-                      Contact {selectedMember.name.split(' ')[0]}
-                    </motion.button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <TeamMemberModal
+        member={selectedMember}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </motion.section>
   );
 };

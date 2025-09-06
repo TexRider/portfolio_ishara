@@ -35,6 +35,20 @@ const HeroSection = () => {
     },
   };
 
+  // Floating animation for the image
+  const floatVariants = {
+    animate: {
+      y: ["0%", "-3%", "0%"],
+      transition: {
+        y: {
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }
+      }
+    }
+  };
+
   return (
     <motion.section
       className="relative min-h-screen flex items-center justify-center overflow-hidden text-white py-16 bg-transparent"
@@ -109,14 +123,18 @@ const HeroSection = () => {
             </motion.div>
           </motion.div>
 
-          {/* Image Container */}
+          {/* Image Container with floating animation */}
           <motion.div
             className="md:w-1/2 flex justify-center"
             initial="hidden"
             animate="visible"
             variants={imageVariants}
           >
-            <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
+            <motion.div 
+              className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96"
+              variants={floatVariants}
+              animate="animate"
+            >
               <div 
                 className="absolute inset-0 rounded-full shadow-2xl transform rotate-6"
                 style={{ background: "linear-gradient(to bottom right, #C1856D, #9A3F3F)" }}
@@ -129,15 +147,14 @@ const HeroSection = () => {
                 className="relative rounded-full w-full h-full overflow-hidden border-4 shadow-xl"
                 style={{ borderColor: "#FBF9D1", backgroundColor: "#9A3F3F" }}
               >
-                {/* Replace with your actual image */}
-                <div 
-                  className="w-full h-full flex items-center justify-center"
-                  style={{ background: "linear-gradient(to bottom right, #C1856D, #9A3F3F)" }}
-                >
-                  <span className="text-lg" style={{ color: "#FBF9D1" }}>Your Image Here</span>
-                </div>
+                {/* Profile Image */}
+                <img 
+                  src="/Ishara_Profile/Profile_Image.jpg" 
+                  alt="Ishara Perera" 
+                  className="w-full h-full object-cover"
+                />
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
