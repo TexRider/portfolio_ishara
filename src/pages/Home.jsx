@@ -1,77 +1,50 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import HeroSection from "../components/HeroSection.jsx";
 import PortfolioPage from "./PortfolioPage.jsx";
 import AboutUs from "./AboutUs.jsx";
 import MusicPlayer from "../components/MusicPlayer.jsx";
-import Gallery from "../components/Gallery"; // Import the Gallery component
+import Gallery from "../components/Gallery";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Home = () => {
-  const fadeVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-    exit: {
-      opacity: 0,
-      y: -20,
-      transition: { duration: 0.5, ease: "easeIn" },
-    },
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    // Ensure scrolling is enabled after loading
+    document.body.style.overflow = "unset";
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Content */}
-      <motion.div
-        id="hero"
-        variants={fadeVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        exit="exit"
+    <>
+      <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+      
+      <div 
+        className="min-h-screen relative overflow-hidden" 
+        style={{ display: isLoading ? 'none' : 'block' }}
       >
-        <HeroSection />
-      </motion.div>
+        {/* Content */}
+        <div id="hero">
+          <HeroSection />
+        </div>
 
-      <motion.div
-        id="portfolio"
-        variants={fadeVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        exit="exit"
-      >
-        <PortfolioPage />
-      </motion.div>
+        <div id="portfolio">
+          <PortfolioPage />
+        </div>
 
-      {/* Gallery Section */}
-      <motion.div
-        id="gallery"
-        variants={fadeVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        exit="exit"
-      >
-        <Gallery />
-      </motion.div>
+        {/* Gallery Section */}
+        <div id="gallery">
+          <Gallery />
+        </div>
 
-      <motion.div
-        id="about"
-        variants={fadeVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        exit="exit"
-      >
-        <AboutUs />
-      </motion.div>
+        <div id="about">
+          <AboutUs />
+        </div>
 
-      {/* Music Player Component */}
-      <MusicPlayer />
-    </div>
+        {/* Music Player Component */}
+        <MusicPlayer />
+      </div>
+    </>
   );
 };
 

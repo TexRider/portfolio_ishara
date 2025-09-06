@@ -1,6 +1,7 @@
 // HeroSection.jsx
 import React from "react";
 import { motion } from "framer-motion";
+import ShinyText from './ShinyText'; // Adjust the import path as needed
 
 const HeroSection = () => {
   const fadeVariants = {
@@ -58,7 +59,6 @@ const HeroSection = () => {
       viewport={{ once: true, amount: 0.3 }}
       exit="exit"
     >
-      {/* Remove the background gradient div */}
       <div className="container mx-auto px-4 z-10 mt-8 mb-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Text Content */}
@@ -78,14 +78,25 @@ const HeroSection = () => {
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
               variants={textVariants}
             >
-              Hi, I'm <span style={{ color: "#FBF9D1" }}>Ishara Perera</span>
+              Hi, I'm <ShinyText 
+                text="Ishara Perera" 
+                disabled={false} 
+                speed={5} 
+                className="font-bold" 
+                baseColor="#FFFFFF"
+              />
             </motion.h1>
             <motion.h2
               className="text-2xl md:text-3xl lg:text-4xl font-semibold mb-6"
-              style={{ color: "#C1856D" }}
               variants={textVariants}
             >
-              Wood Crafter and Cosplay Prop Designer
+              <ShinyText 
+                text="Wood Crafter and Cosplay Prop Designer" 
+                disabled={false} 
+                speed={4} 
+                className="font-semibold" 
+                baseColor="#FFFFFF"
+              />
             </motion.h2>
             <motion.p
               className="text-lg md:text-xl mb-8"

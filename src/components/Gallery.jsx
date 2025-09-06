@@ -1,5 +1,5 @@
 // components/Gallery.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Grid, List, AlertCircle, ExternalLink } from "lucide-react";
 
@@ -35,7 +35,7 @@ const sampleImages = [
   },
   {
     id: 5,
-    src: "/Ishara_Gallery/Portrait_DanteSword_Image_1.jpg",  // This path is incomplete
+    src: "/Ishara_Gallery/Portrait_DanteSword_Image_1.jpg",
     title: "Dante Blade",
     description: "A longsword of Dante, from Devil May Cry",
     type: "portrait",
@@ -133,6 +133,22 @@ const Gallery = () => {
   const [filter, setFilter] = useState("all");
   const [imageStatus, setImageStatus] = useState({});
   const [showDebug, setShowDebug] = useState(false);
+  const [loadedImages, setLoadedImages] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile devices
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
   // Normalize types to lowercase for consistent filtering
   const normalizedImages = sampleImages.map(img => ({
@@ -151,31 +167,41 @@ const Gallery = () => {
       ? portraitImages
       : landscapeImages;
 
-  // Check if images are loading correctly
+  // Optimized image loading with lazy loading and throttling
   useEffect(() => {
-    filteredImages.forEach(image => {
-      const img = new Image();
-      img.onload = () => {
-        setImageStatus(prev => ({ ...prev, [image.id]: 'loaded' }));
-      };
-      img.onerror = () => {
-        setImageStatus(prev => ({ ...prev, [image.id]: 'error' }));
-        console.error(`Failed to load image: ${image.src}`);
-      };
-      img.src = image.src;
-    });
-  }, [filteredImages]);
+    const loadImages = () => {
+      filteredImages.forEach((image, index) => {
+        // Stagger loading for mobile devices to prevent overload
+        const loadDelay = isMobile ? index * 100 : 0;
+        
+        setTimeout(() => {
+          const img = new Image();
+          img.onload = () => {
+            setImageStatus(prev => ({ ...prev, [image.id]: 'loaded' }));
+            setLoadedImages(prev => prev + 1);
+          };
+          img.onerror = () => {
+            setImageStatus(prev => ({ ...prev, [image.id]: 'error' }));
+            console.error(`Failed to load image: ${image.src}`);
+          };
+          img.src = image.src;
+        }, loadDelay);
+      });
+    };
 
-  const openLightbox = (image, index) => {
+    loadImages();
+  }, [filteredImages, isMobile]);
+
+  const openLightbox = useCallback((image, index) => {
     setSelectedImage(image);
     setLightboxIndex(index);
-  };
+  }, []);
 
-  const closeLightbox = () => {
+  const closeLightbox = useCallback(() => {
     setSelectedImage(null);
-  };
+  }, []);
 
-  const navigateImage = (direction) => {
+  const navigateImage = useCallback((direction) => {
     let newIndex;
     if (direction === "next") {
       newIndex = (lightboxIndex + 1) % filteredImages.length;
@@ -185,15 +211,15 @@ const Gallery = () => {
     }
     setLightboxIndex(newIndex);
     setSelectedImage(filteredImages[newIndex]);
-  };
+  }, [lightboxIndex, filteredImages]);
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === "Escape") closeLightbox();
     if (e.key === "ArrowRight") navigateImage("next");
     if (e.key === "ArrowLeft") navigateImage("prev");
-  };
+  }, [closeLightbox, navigateImage]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedImage) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
@@ -202,7 +228,7 @@ const Gallery = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "unset";
     };
-  }, [selectedImage, lightboxIndex]);
+  }, [selectedImage, lightboxIndex, handleKeyDown]);
 
   // Grid layout calculations
   const getGridClass = (image) => {
@@ -215,15 +241,27 @@ const Gallery = () => {
   };
 
   // Add error handling for images
-  const handleImageError = (e, id) => {
+  const handleImageError = useCallback((e, id) => {
     console.error(`Error loading image with ID ${id}: ${e.target.src}`);
     e.target.src = "https://via.placeholder.com/300x200/9A3F3F/E6CFA9?text=Image+Not+Found";
     setImageStatus(prev => ({ ...prev, [id]: 'error' }));
-  };
+  }, []);
+
+  // Improved loading indicator
+  if (loadedImages === 0 && filteredImages.length > 0) {
+    return (
+      <section id="gallery" className="min-h-screen py-20 px-4 bg-[#1a1a1a] flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#9A3F3F] mb-4"></div>
+          <p className="text-[#E6CFA9]">Loading gallery...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section id="gallery" className="min-h-screen py-20 px-4 bg-linear-to-r from-[#230A02]/50 to-[#1C0802]/50">
-      <div className="px-4 mx-auto">
+    <section id="gallery" className="min-h-screen py-20 px-4 bg-[#1a1a1a]">
+      <div className="max-w-7xl mx-auto">
         <motion.h2
           className="text-3xl md:text-4xl font-bold text-center mb-4 text-[#FBF9D1]"
           initial={{ opacity: 0, y: -20 }}
@@ -231,7 +269,7 @@ const Gallery = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          My Creations
+          My Gallery
         </motion.h2>
 
         <motion.p
@@ -241,10 +279,11 @@ const Gallery = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          A collection of my crafts and designs on various franchises and cultures.
+          A collection of my photography work showcasing both portrait and
+          landscape compositions.
         </motion.p>
 
-        {/* Debug toggle. Do not turn this on unless it is needed to check whether the images are not loading and it is needed to check. */}
+        {/* Debug toggle */}
         {/* <div className="flex justify-center mb-6">
           <button 
             onClick={() => setShowDebug(!showDebug)}
@@ -255,16 +294,18 @@ const Gallery = () => {
           </button>
         </div> */}
 
-        {/* Debug info. Do not turn this on unless it is needed to check whether the images are not loading and it is needed to check. */}
+        {/* Debug info */}
         {/* {showDebug && (
           <div className="bg-[#2a2a2a] p-4 rounded-lg mb-6 border border-[#C1856D]">
             <h3 className="text-lg font-semibold text-[#FBF9D1] mb-2">Debug Information</h3>
+            <p className="text-[#E6CFA9] mb-2">Loaded: {loadedImages} of {filteredImages.length} images</p>
+            <p className="text-[#E6CFA9] mb-2">Device: {isMobile ? 'Mobile' : 'Desktop'}</p>
             <p className="text-[#E6CFA9] mb-2">Image paths being used:</p>
-            <ul className="text-sm text-[#E6CFA9] mb-4">
+            <ul className="text-sm text-[#E6CFA9] mb-4 max-h-40 overflow-y-auto">
               {filteredImages.map(img => (
                 <li key={img.id} className="mb-1 flex items-center">
                   <span className="w-8">ID {img.id}:</span> 
-                  <code className="bg-[#3a3a3a] px-1 py-0.5 rounded flex-1 mx-2 text-[#C1856D]">{img.src}</code> 
+                  <code className="bg-[#3a3a3a] px-1 py-0.5 rounded flex-1 mx-2 text-[#C1856D] truncate">{img.src}</code> 
                   <span className={`px-2 py-1 rounded text-xs ${imageStatus[img.id] === 'loaded' ? 'bg-[#2c5e2c] text-[#c8f5c8]' : 'bg-[#9A3F3F] text-[#FBF9D1]'}`}>
                     {imageStatus[img.id] || 'checking...'}
                   </span>
@@ -272,7 +313,7 @@ const Gallery = () => {
                     href={img.src} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="ml-2 text-[#C1856D] hover:text-[#E6CFA9] transition-colors"
+                    className="ml-2 text-[#C1856D] hover:text-[#E6CFA9] transition-colors flex-shrink-0"
                     title="Open image in new tab"
                   >
                     <ExternalLink size={14} />
@@ -360,7 +401,7 @@ const Gallery = () => {
               viewport={{ once: true, margin: "0px 0px -100px 0px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               onClick={() => openLightbox(image, index)}
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: isMobile ? 1 : 1.03 }}
               layout
             >
               <div className="relative w-full h-64 md:h-72 lg:h-80 overflow-hidden bg-[#2a2a2a]">

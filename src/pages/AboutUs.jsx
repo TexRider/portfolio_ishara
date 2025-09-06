@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Linkedin, Github } from "lucide-react";
+import CountUp from "../components/CountUp"; // Import the CountUp component
 
 // Team member data
 const teamMembers = [
@@ -10,7 +11,7 @@ const teamMembers = [
     role: "Owner",
     image: "/Ishara_Profile/Cosplay_2.jpg",
     description:
-      "I am a passionate wooden props artisan dedicated to crafting unique, story-driven pieces that ignite creativity and elevate any setting. From theatrical productions and film sets to photo shoots and bespoke displays, my work blends traditional craftsmanship with artistic vision. Each prop is meticulously handcrafted, ensuring it embodies character, authenticity, and timeless beauty. For me, wood is not just a material—it’s a canvas for imagination.",
+      "I am a passionate wooden props artisan dedicated to crafting unique, story-driven pieces that ignite creativity and elevate any setting. From theatrical productions and film sets to photo shoots and bespoke displays, my work blends traditional craftsmanship with artistic vision. Each prop is meticulously handcrafted, ensuring it embodies character, authenticity, and timeless beauty. For me, wood is not just a material—it's a canvas for imagination.",
     skills: ["Crafter", "Cosplayer"],
     // email: "sarah@company.com",
     // linkedin: "https://linkedin.com/in/sarahjohnson",
@@ -358,7 +359,7 @@ const AboutUs = () => {
           />
         </motion.div>
 
-        {/* Stats Section */}
+        {/* Stats Section - Updated with CountUp animation */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -367,9 +368,9 @@ const AboutUs = () => {
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
         >
           {[
-            { number: "50+", label: "Props crafted" },
-            { number: "4+", label: "Years Experience" },
-            { number: "100%", label: "Client Satisfaction" },
+            { number: 50, label: "Props crafted", suffix: "+" },
+            { number: 4, label: "Years Experience", suffix: "+" },
+            { number: 100, label: "Client Satisfaction", suffix: "%" },
           ].map((stat, index) => (
             <motion.div
               key={index}
@@ -383,7 +384,15 @@ const AboutUs = () => {
               className="text-center p-6 bg-[#E6CFA9] rounded-lg shadow-lg border-2 border-[#9A3F3F] border-opacity-10 cursor-pointer"
             >
               <h3 className="text-4xl font-bold text-[#9A3F3F] mb-2">
-                {stat.number}
+                <CountUp
+                  from={0}
+                  to={stat.number}
+                  duration={2}
+                  delay={0.2 * index}
+                  separator=","
+                  className="count-up-text"
+                />
+                {stat.suffix}
               </h3>
               <p className="text-[#9A3F3F]">{stat.label}</p>
             </motion.div>
@@ -538,7 +547,7 @@ const AboutUs = () => {
             "Every grain of wood holds a story, and I bring that story to life.
             My mission is to transform raw timber into captivating props that
             whisper tales of imagination and wonder. Each creation is more than
-            an object—it’s a character, a mood, a spark of artistry crafted by
+            an object—it's a character, a mood, a spark of artistry crafted by
             hand, designed to enchant stages, sets, and souls alike."
           </motion.p>
         </motion.div>
