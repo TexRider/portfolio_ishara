@@ -368,8 +368,8 @@ const AboutUs = () => {
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
         >
           {[
-            { number: 50, label: "Props crafted", suffix: "+" },
-            { number: 4, label: "Years Experience", suffix: "+" },
+            { number: 20, label: "Props crafted", suffix: "+" },
+            { number: 2, label: "Years Experience", suffix: "+" },
             { number: 100, label: "Client Satisfaction", suffix: "%" },
           ].map((stat, index) => (
             <motion.div

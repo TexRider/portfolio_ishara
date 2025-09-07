@@ -1,12 +1,8 @@
 // tailwind.config.js
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: "class", // This enables class-based dark mode
   theme: {
-    extend: {
-      // In v4, animations are defined differently
-    },
+    // This holds the themes
   },
-}
+};
